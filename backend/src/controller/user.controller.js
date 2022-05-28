@@ -52,7 +52,7 @@ const validateUser = async (req, res) => {
                 console.log(result);
                 if (result) {
                     console.log(users);
-                    res.send(users);
+                    res.send({data:users,message:"Successfully Logged In"});
                 } else {
                     console.log("Credentials Does Not Matched");
                     res.status(500).send("Credentials Does Not Matched");

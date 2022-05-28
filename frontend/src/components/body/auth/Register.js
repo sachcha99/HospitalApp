@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
 import {
   showErrMsg,
   showSuccessMsg,
@@ -26,12 +32,18 @@ function Register() {
   const [patient, setPatient] = useState(initialState);
 
   const { name, email, password, cf_password, err, success } = patient;
+  const [role, setRole] = useState('');
+
+  const handleChange = (e) => {
+    setRole(e.target.value);
+  }
 
   const handleChangeInput = e => {
     const { name, value } = e.target;
-
+    console.log("dd", name, value)
     setPatient({ ...patient, [name]: value, err: "", success: "" });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,19 +74,19 @@ function Register() {
         success: "",
       });
 
-
+    console.log("role", role)
     try {
       const res = await axios.post("http://localhost:5000/user/create", {
         "fullName": name,
         "email": email,
         "password": password,
-        "role": "doctor"
+        "role": role
       });
       console.log(res)
       setPatient({ ...patient, err: "", success: res.data.message });
     } catch (err) {
       err.response.data.msg &&
-         setPatient({ ...patient, err: err.response.data.message, success: "" });
+        setPatient({ ...patient, err: err.response.data.message, success: "" });
     }
   };
 
@@ -84,10 +96,10 @@ function Register() {
     <div className="login_page">
       <h2>Register</h2>
 
-      {err && showErrMsg(err)} 
+      {err && showErrMsg(err)}
       {success && showSuccessMsg(success)}
 
-      <form onSubmit={e=>handleSubmit(e)}>
+      <form onSubmit={e => handleSubmit(e)}>
         <div>
           <label htmlFor="name"> Name </label>
           <input
@@ -96,7 +108,7 @@ function Register() {
             id="name"
             value={name}
             name="name"
-          onChange={handleChangeInput}
+            onChange={handleChangeInput}
           ></input>
         </div>
 
@@ -108,7 +120,7 @@ function Register() {
             id="email"
             value={email}
             name="email"
-          onChange={handleChangeInput}
+            onChange={handleChangeInput}
           ></input>
         </div>
 
@@ -120,7 +132,7 @@ function Register() {
             id="password"
             value={password}
             name="password"
-          onChange={handleChangeInput}
+            onChange={handleChangeInput}
           ></input>
         </div>
 
@@ -132,55 +144,23 @@ function Register() {
             id="cf_password"
             value={cf_password}
             name="cf_password"
-          onChange={handleChangeInput}
+            onChange={handleChangeInput}
           ></input>
         </div>
 
-        {/* <div>
-          <label htmlFor="cf_password">Choose User</label>
-          <input
-            type="radio"
-            id="patient"
-            name="user"
-          ></input>
-          <label for="age1">Patient</label><br></br>
-        </div> */}
-        {/* <div>
-<p>Please select your favorite Web language:</p>
-  <input type="radio" id="html" name="fav_language" value="HTML"></input>
-  <label for="html">Patient</label>
-  <input type="radio" id="css" name="fav_language" value="CSS"></input>
-  <label for="css">Doctor</label>
-</div> */}
 
-
-        <div class="wrapper">
-          <p>Select User</p>
-          <input type="radio" name="select" id="option-1" checked></input>
-          <input type="radio" name="select" id="option-2"></input>
-          <label for="option-1" class="option option-1">
-            <div class="dot"></div>
-            <span>Patient</span>
-          </label> <br></br>
-          <label for="option-2" class="option option-2">
-            <div class="dot"></div>
-            <span>Doctor</span>
-          </label> <br></br>
-        </div>
-
-        {/* <div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"></input>
-  <label class="form-check-label" for="flexRadioDefault1">
-    Patient
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked></input>
-  <label class="form-check-label" for="flexRadioDefault2">
-    Doctor
-  </label>
-</div> */}
-
+        <FormControl>
+          <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="female"
+            name="radio-buttons-group"
+            onChange={handleChange} 
+          >
+            <FormControlLabel value="Patient" control={<Radio />} label="Patient" />
+            <FormControlLabel value="Doctor" control={<Radio />} label="Doctor" />
+          </RadioGroup>
+        </FormControl>
 
         <div className="row">
           <button type="submit"> Register </button>
