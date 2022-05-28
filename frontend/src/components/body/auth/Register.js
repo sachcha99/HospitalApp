@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-// import axios from "axios";
+import axios from "axios";
 
 import {
   showErrMsg,
@@ -13,87 +13,90 @@ import {
   isMatch,
 } from "../../utils/validation/Validation";
 
-// const initialState = {
-//   name: "",
-//   email: "",
-//   password: "",
-//   cf_password: "",
-//   err: "",
-//   success: "",
-// };
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  cf_password: "",
+  err: "",
+  success: "",
+};
 
 function Register() {
-  // const [patient, setPatient] = useState(initialState);
+  const [patient, setPatient] = useState(initialState);
 
-  // const { name, email, password, cf_password, err, success } = patient;
+  const { name, email, password, cf_password, err, success } = patient;
 
-  // const handleChangeInput = e => {
-  //   const { name, value } = e.target;
+  const handleChangeInput = e => {
+    const { name, value } = e.target;
 
-  //   setPatient({ ...patient, [name]: value, err: "", success: "" });
-  // };
+    setPatient({ ...patient, [name]: value, err: "", success: "" });
+  };
 
-  // const handleSubmit = async e => {
-  //   e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("first", name,
+      email,
+      password)
+    if (isEmpty(name) || isEmpty(password))
+      return setPatient({
+        ...patient,
+        err: "Please fill in all the fields!",
+        success: "",
+      });
 
-  //   if (isEmpty(name) || isEmpty(password))
-  //     return setPatient({
-  //       ...patient,
-  //       err: "Please fill in all the fields!",
-  //       success: "",
-  //     });
+    if (!isEmail(email))
+      return setPatient({ ...patient, err: "Invalid Emails.", success: "" });
 
-  //   if (!isEmail(email))
-  //     return setPatient({ ...patient, err: "Invalid Emails.", success: "" });
+    if (isLength(password))
+      return setPatient({
+        ...patient,
+        err: "Password must contain at least 6 characters!",
+        success: "",
+      });
 
-  //   if (isLength(password))
-  //     return setPatient({
-  //       ...patient,
-  //       err: "Password must contain at least 6 characters!",
-  //       success: "",
-  //     });
+    if (!isMatch(password, cf_password))
+      return setPatient({
+        ...patient,
+        err: "Passwords did not match!",
+        success: "",
+      });
 
-  //   if (!isMatch(password, cf_password))
-  //     return setPatient({
-  //       ...patient,
-  //       err: "Passwords did not match!",
-  //       success: "",
-  //     });
-   
-      
-  //   try {
-  //     const res = await axios.post("/patient/register", {
-  //       name,
-  //       email,
-  //       password,
-  //     });
 
-  //     setPatient({ ...patient, err: "", success: res.data.msg });
-  //   } catch (err) {
-  //     err.response.data.msg &&
-  //       setPatient({ ...patient, err: err.response.data.msg, success: "" });
-  //   }
-  // };
+    try {
+      const res = await axios.post("http://localhost:5000/user/create", {
+        "fullName": name,
+        "email": email,
+        "password": password,
+        "role": "doctor"
+      });
+      console.log(res)
+      setPatient({ ...patient, err: "", success: res.data.message });
+    } catch (err) {
+      err.response.data.msg &&
+         setPatient({ ...patient, err: err.response.data.message, success: "" });
+    }
+  };
 
-  
+
 
   return (
     <div className="login_page">
       <h2>Register</h2>
 
-      {/* {err && showErrMsg(err)} */}
-      {/* {success && showSuccessMsg(success)} */}
+      {err && showErrMsg(err)} 
+      {success && showSuccessMsg(success)}
 
-      <form onSubmit>
+      <form onSubmit={e=>handleSubmit(e)}>
         <div>
           <label htmlFor="name"> Name </label>
           <input
             type="text"
             placeholder="Enter your name"
             id="name"
-            // value={name}
+            value={name}
             name="name"
-            // onChange={handleChangeInput}
+          onChange={handleChangeInput}
           ></input>
         </div>
 
@@ -103,9 +106,9 @@ function Register() {
             type="text"
             placeholder="Enter email address"
             id="email"
-            // value={email}
+            value={email}
             name="email"
-            // onChange={handleChangeInput}
+          onChange={handleChangeInput}
           ></input>
         </div>
 
@@ -115,9 +118,9 @@ function Register() {
             type="password"
             placeholder="Enter password"
             id="password"
-            // value={password}
+            value={password}
             name="password"
-            // onChange={handleChangeInput}
+          onChange={handleChangeInput}
           ></input>
         </div>
 
@@ -127,9 +130,9 @@ function Register() {
             type="password"
             placeholder="Confirm Password"
             id="cf_password"
-            // value={cf_password}
+            value={cf_password}
             name="cf_password"
-            // onChange={handleChangeInput}
+          onChange={handleChangeInput}
           ></input>
         </div>
 
@@ -142,7 +145,7 @@ function Register() {
           ></input>
           <label for="age1">Patient</label><br></br>
         </div> */}
-{/* <div>
+        {/* <div>
 <p>Please select your favorite Web language:</p>
   <input type="radio" id="html" name="fav_language" value="HTML"></input>
   <label for="html">Patient</label>
@@ -151,21 +154,21 @@ function Register() {
 </div> */}
 
 
-<div class="wrapper">
-  <p>Select User</p>
- <input type="radio" name="select" id="option-1" checked></input>
- <input type="radio" name="select" id="option-2"></input>
-   <label for="option-1" class="option option-1">
-     <div class="dot"></div>
-      <span>Patient</span>
-      </label> <br></br>
-   <label for="option-2" class="option option-2">
-     <div class="dot"></div>
-      <span>Doctor</span>
-   </label> <br></br>
-</div>
+        <div class="wrapper">
+          <p>Select User</p>
+          <input type="radio" name="select" id="option-1" checked></input>
+          <input type="radio" name="select" id="option-2"></input>
+          <label for="option-1" class="option option-1">
+            <div class="dot"></div>
+            <span>Patient</span>
+          </label> <br></br>
+          <label for="option-2" class="option option-2">
+            <div class="dot"></div>
+            <span>Doctor</span>
+          </label> <br></br>
+        </div>
 
-{/* <div class="form-check">
+        {/* <div class="form-check">
   <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"></input>
   <label class="form-check-label" for="flexRadioDefault1">
     Patient

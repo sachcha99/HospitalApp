@@ -5,7 +5,7 @@ const saltRounds = 5;
 //Register a User | guest
 const createUser = async (req, res) => {
     if (req.body) {
-        
+
         let email = req.body.email;
         await User.findOne({ email: email }, async (err, result) => {
             if (err) {
@@ -21,7 +21,7 @@ const createUser = async (req, res) => {
                             await user.save()
                                 .then(data => {
                                     console.log(data);
-                                    res.status(200).send(data);
+                                    res.status(200).send({data:data, message: "Successfully Registered" });
                                 })
                                 .catch(err => {
                                     console.log(err);
