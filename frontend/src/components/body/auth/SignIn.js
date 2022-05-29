@@ -37,10 +37,12 @@ function SignIn() {
       setPatient({ ...patient, err: '', success: res.data.message })
       sessionStorage.setItem('user', JSON.stringify(res.data.data));
       if (res.data.data.role == "patient") {
+        console.log("firsddddt")
         navigate('/dashboardpatient')
 
         window.location.reload()
       } else if (res.data.data.role == "doctor") {
+        console.log("dddddd")
         navigate('/dashboarddoctor')
 
         window.location.reload()

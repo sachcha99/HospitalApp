@@ -5,10 +5,10 @@ const createAppointment = async (req, res) => {
     if (req.body) {
 
         const data = {
-            name: req.body.name,
             description: req.body.description,
-            type: req.body.type,
-            datetime: req.body.datetime,
+            date: req.body.date,
+            time: req.body.time,
+
         }
         const appointment = new Appointment(data);
 

@@ -157,8 +157,8 @@ function Register() {
             name="radio-buttons-group"
             onChange={handleChange} 
           >
-            <FormControlLabel value="Patient" control={<Radio />} label="Patient" />
-            <FormControlLabel value="Doctor" control={<Radio />} label="Doctor" />
+            <FormControlLabel value="patient" control={<Radio />} label="Patient" />
+            <FormControlLabel value="doctor" control={<Radio />} label="Doctor" />
           </RadioGroup>
         </FormControl>
 
